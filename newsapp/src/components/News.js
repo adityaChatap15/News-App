@@ -38,14 +38,19 @@ export class News extends Component {
 
   async updateNews() {
     const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=7b815a8fd9684e9a97402cb6f970103c&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    this.props.setProgress(10);
     { this.setState({ loading: true }) };
     let data = await fetch(url);
+    this.props.setProgress(30);
     let parsedData = await data.json()
+    this.props.setProgress(70);
     this.setState({
       articles: parsedData.articles,
       totalResults: parsedData.totalResults,
-      loading: false
+      loading: false,
+      source: parsedData.source
     })
+    this.props.setProgress(100);
   }
 
   async componentDidMount() {
@@ -71,7 +76,8 @@ export class News extends Component {
     let parsedData = await data.json()
     this.setState({
       articles: this.state.articles.concat(parsedData.articles),
-      totalResults: parsedData.totalResults
+      totalResults: parsedData.totalResults,
+      source: parsedData.source
     })
   };
 
@@ -80,7 +86,7 @@ export class News extends Component {
     return (
       <>
         <h1 className='text-center' style={{ margin: '40px 0px' }}>NewsMonkey - Top {this.capitalizeFristLetter(this.props.category)} Headlines</h1>
-        {this.state.loading && <Spinner/>}
+        {this.state.loading && <Spinner />}
         <InfiniteScroll
           dataLength={this.state.articles.length}
           next={this.fetchMoreData}
@@ -92,7 +98,7 @@ export class News extends Component {
             <div className="row">
               {!this.state.loading && this.state.articles.map((element) => {
                 return <div className="col-md-3" key={element.url}>
-                  <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : ""} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author} date={element.publishedAt} />
+                  <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : ""} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author} date={element.publishedAt} source={element.source} />
                 </div>
               })}
             </div>
