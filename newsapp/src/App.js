@@ -1,4 +1,5 @@
-// import logo from './logo.svg';
+
+
 import './App.css';
 
 import React, { Component } from 'react'
@@ -21,7 +22,7 @@ export default class App extends Component {
     return (
       <div>
         <Router>
-          <NavBar />
+          <NavBar/>
           <LoadingBar
           height={3}
             color='#f11946'
@@ -42,4 +43,3 @@ export default class App extends Component {
     )
   }
 }
-
